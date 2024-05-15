@@ -1,6 +1,6 @@
 use leptos::*;
-use leptos_router::*;
 use leptos_meta::*;
+use leptos_router::*;
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -11,7 +11,7 @@ pub fn App() -> impl IntoView {
         <Router>
             <Routes>
                 // this works ok
-                
+
                 // <Route path="/" view=|| view! {<Html lang="en-US" /><Outlet />}>
                 //     <Route path="/" view=|| view! {<SimpleNavComponent />}>
                 //         { view! {<DeepNestedRouteSelector url=1 />} }
@@ -20,12 +20,15 @@ pub fn App() -> impl IntoView {
                 //     <Route path="/comp3" view=SimpleComponent3 />
                 //     <Route path="/comp4" view=SimpleComponent4 />
                 // </Route>
-                
+
                 // this one also works ok
-                <EnumerationNestedRoutes />
-                
-                // this doesn't work, tough
+                // <EnumerationNestedRoutes />
+
+                // this doesn't work
                 // <FragmentNestedRoutes />
+
+                // this doesn't work
+                <CollectedNestedRoutes />
             </Routes>
         </Router>
     }
@@ -99,6 +102,19 @@ fn FragmentNestedRoutes() -> impl IntoView {
         <Route path="/" view=|| view! {<Html lang="en-US" /><Outlet />}>
             <Route path="/" view=|| view! {<SimpleNavComponent />}>
                 {Fragment::from_iter(vec![1, 2].into_iter().map(|n: i8| view!{ <DeepNestedRouteSelector url=n /> }))}
+            </Route>
+            <Route path="/comp3" view=SimpleComponent3 />
+            <Route path="/comp4" view=SimpleComponent4 />
+        </Route>
+    }
+}
+
+#[component(transparent)]
+fn CollectedNestedRoutes() -> impl IntoView {
+    view! {
+        <Route path="/" view=|| view! {<Html lang="en-US" /><Outlet />}>
+            <Route path="/" view=|| view! {<SimpleNavComponent />}>
+                {vec![1, 2].into_iter().map(|n: i8| view!{ <DeepNestedRouteSelector url=n /> }).collect_view()}
             </Route>
             <Route path="/comp3" view=SimpleComponent3 />
             <Route path="/comp4" view=SimpleComponent4 />
